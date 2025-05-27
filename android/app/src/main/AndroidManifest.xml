@@ -1,4 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+ package="com.yourcompany.chatappfirebase">
+
     <application
         android:label="chatapp_firebase"
         android:name="${applicationName}"
