@@ -1,3 +1,4 @@
+import 'package:chatapp_firebase/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -11,10 +12,10 @@ void main() async
 
     // run the intialization for web
       await Firebase.initializeApp(options: FirebaseOptions(
-    apiKey: apiKey,
-    appId: appId,
-    messagingSenderId: messagingSenderId,
-    projectId: projectId));
+    apiKey: Constants.apiKey,
+    appId: Constants.appId,
+    messagingSenderId: Constants.messagingSenderId,
+    projectId: Constants.projectId));
     runApp(const MyApp());
 
     }
