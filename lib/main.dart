@@ -1,5 +1,6 @@
 import 'package:chatapp_firebase/helper/helper_function.dart';
 import 'package:chatapp_firebase/pages/auth/home_page.dart';
+import 'package:chatapp_firebase/pages/auth/login_page.dart';
 import 'package:chatapp_firebase/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _isSignedIn? HomePage(): LoginPage(),
+        home: _isSignedIn? const HomePage(): const LoginPage(),
     );
   }
 }
