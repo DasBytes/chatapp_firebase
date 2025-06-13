@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HelperFunctions {
 
 // keys
@@ -12,7 +14,11 @@ class HelperFunctions {
 
 
 // getting the data from share preferences
-
+   
+   static Future<bool?> getUserLoggedInStatus() async {
+    SharedPreferences sf= await SharedPreferences.getInstance();
+    return sf.getBool(userLoggedInKey);
+   }
 
 
 }
