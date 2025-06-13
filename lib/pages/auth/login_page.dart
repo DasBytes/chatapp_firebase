@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
            const SizedBox(height: 10,),
            const Text("Login now to see what they are talking!", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),),
-          Image.asset("assets/login.png")
+          Image.asset("assets/register.png")
             ],
       
           ),
