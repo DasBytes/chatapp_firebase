@@ -1,3 +1,4 @@
+import 'package:chatapp_firebase/helper/helper_function.dart';
 import 'package:chatapp_firebase/pages/home_page.dart';
 import 'package:chatapp_firebase/shared/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,8 +33,26 @@ void main() async
   
 }
 
-class MyApp extends StatelessWidget {
+
+
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+    @override
+  void initState() {
+    super.initState();
+    getUserLoggedInStatus();
+  }
+
+   getUserLoggedInStatus() async {
+    await HelperFunctions.
+   }
 
   @override
   Widget build(BuildContext context) {
