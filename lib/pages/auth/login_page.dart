@@ -1,3 +1,4 @@
+import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 
@@ -14,6 +15,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
+    appBar:AppBar(
+      //  backgroundColor: Theme.of(context).primaryColor,
+    ) ,
+   
+
     body: SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
@@ -29,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
            const Text("Login now to see what they are talking!", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
           Image.asset("assets/login.png"),
           TextFormField(
+            decoration: textInputDecoration,
           ),
           
             ],
