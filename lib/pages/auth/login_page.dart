@@ -12,6 +12,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   final formKey= GlobalKey<FormState>();
+  String email="";
+  String password="";
   @override
   Widget build(BuildContext context) {
    return Scaffold(
@@ -25,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
         child: Form(
           key: formKey,
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,7 +38,36 @@ class _LoginPageState extends State<LoginPage> {
            const Text("Login now to see what they are talking!", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
           Image.asset("assets/login.png"),
           TextFormField(
-            decoration: textInputDecoration,
+            decoration: textInputDecoration.copyWith(
+              labelText: "Email",
+              prefixIcon: Icon(
+                Icons.email,
+                color: Theme.of(context).primaryColor,
+              )),
+
+              onChanged: (val){
+                setState(() {
+                  email= val;
+                
+                });
+              },
+          ),
+          const SizedBox(height: 15),
+           TextFormField(
+            obscureText: true,
+            decoration: textInputDecoration.copyWith(
+              labelText: "Password",
+              prefixIcon: Icon(
+                Icons.lock,
+                color: Theme.of(context).primaryColor,
+              )
+            ),
+            onChanged: (val){
+                setState(() {
+                  password= val;
+              
+                });
+              },
           ),
           
             ],
