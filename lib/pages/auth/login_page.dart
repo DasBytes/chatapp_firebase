@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
               text: "Register here",
               style: TextStyle(color: Colors.black, decoration: TextDecoration.underline),
               recognizer: TabGestureRecognizer()..onTab = () {
-
+               nextScreen(context, const)
               }
 
             ),
