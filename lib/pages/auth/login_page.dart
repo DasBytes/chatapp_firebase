@@ -87,9 +87,26 @@ class _LoginPageState extends State<LoginPage> {
 
               },
           ),
-          ElevatedButton(onPressed: (){
-            login();
-          },child: Text("Test")),
+          const SizedBox(height: 20,),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)
+                )
+              ),
+              child:const Text(
+                "Sign In",
+                 style: TextStyle(color: Colors.white, fontSize: 16),
+                 ) ,
+                 onPressed: () {
+                   login();
+                 },
+                 ),
+          )
             ],
       
           ),
@@ -98,10 +115,8 @@ class _LoginPageState extends State<LoginPage> {
     ),
    );
   }
+  login() {
 
-  login(){
-    if(formKey.currentState!.validate()){
-
-    }
   }
+  
 }
