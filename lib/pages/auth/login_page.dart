@@ -106,7 +106,24 @@ class _LoginPageState extends State<LoginPage> {
                    login();
                  },
                  ),
+          ),
+          const SizedBox(height: 10,),
+          Text.rich(TextSpan(
+            text: "Don't have an account? ",
+             style: const TextStyle(color: Colors.black, fontSize: 14),
+            children: <TextSpan>[
+            TextSpan(
+              text: "Register here",
+              style: TextStyle(color: Colors.black, decoration: TextDecoration.underline),
+              recognizer: TabGestureRecognizer()..onTab = () {
+
+              }
+
+            ),
+            ],
+           
           )
+          ),
             ],
       
           ),
