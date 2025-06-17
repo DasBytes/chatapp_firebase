@@ -45,7 +45,7 @@ Dart
 bash
 Copy
 Edit
-git clone https://github.com/your-username/flutter-group-chat-app.git
+git clone (https://github.com/DasBytes/chatapp_firebase.git)
 2. Open the project in VS Code or Android Studio
 3. Install dependencies
 bash
