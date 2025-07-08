@@ -1,3 +1,5 @@
+import 'package:chatapp_firebase/helper/helper_function.dart';
+import 'package:chatapp_firebase/pages/auth/home_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -161,8 +163,12 @@ return Scaffold(
       setState(() {
         _isLoading = true;
       });
-      await authService.registerUserWithEmailandPassword(fullName, email, password).then((value) {
+      await authService.registerUserWithEmailandPassword(fullName, email, password).then((value) async {
          if(value== true) {
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(fullName);
+          nextScreenReplace(context, const HomePage());
 
 
         }
