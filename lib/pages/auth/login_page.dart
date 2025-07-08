@@ -1,4 +1,5 @@
 import 'package:chatapp_firebase/pages/auth/register_page.dart';
+import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -11,9 +12,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
   final formKey = GlobalKey<FormState>();
   String email = "";
   String password = "";
+  AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,8 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: SingleChildScrollView(
+      body: _isLoading ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),) :
+       SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
           child: Form(
@@ -126,5 +130,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  login() {}
+  login()  async {
+     if(formKey.currentState!.validate()){
+      setState(() {
+        _isLoading = true;
+      });
+      await authService.registerUserWithEmailandPassword(fullName, email, password).then((value) async {
+         if(value== true) {
+          await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(fullName);
+          nextScreenReplace(context, const HomePage());
+
+
+        }
+        else {
+          showSnackBar(context, Colors.red, value);
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      },);
+       
+      }
+  }
 }
