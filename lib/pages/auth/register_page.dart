@@ -12,6 +12,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
+  bool _isLoading = false;
   final formKey = GlobalKey<FormState>();
   String email ="";
   String password= "";
@@ -152,7 +154,12 @@ return Scaffold(
   }
 
 
-  register(){
+  register() async{
+    if(formKey.currentState!.validate()){
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
   }
 }
