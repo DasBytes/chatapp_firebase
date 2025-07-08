@@ -167,7 +167,7 @@ return Scaffold(
 
         }
         else {
-          showSnackBar();
+          showSnackBar(context, Colors.red, value);
           setState(() {
             _isLoading = false;
           });
@@ -178,5 +178,5 @@ return Scaffold(
     }
 
   }
-}
+
 
