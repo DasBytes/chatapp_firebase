@@ -1,4 +1,4 @@
-
+import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:chatapp_firebase/pages/auth/login_page.dart';
@@ -18,10 +18,12 @@ class _RegisterPageState extends State<RegisterPage> {
   String email ="";
   String password= "";
   String fullName= "";
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
 return Scaffold(
-      body: SingleChildScrollView(
+      body: _isLoading ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor),) :
+       SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
           child: Form(
@@ -159,6 +161,20 @@ return Scaffold(
       setState(() {
         _isLoading = true;
       });
+      await authService.registerUserWithEmailandPassword(fullName, email, password).then((value) {
+         if(value== true) {
+
+
+        }
+        else {
+          showSnackBar();
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      },);
+       
+      }
     }
 
   }
