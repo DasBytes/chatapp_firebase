@@ -104,10 +104,31 @@ class _HomePageState extends State<HomePage> {
 
              ListTile(
               onTap: () async {
-                showDialog(context: context, builder: (context){
+                
+                showDialog(
+                  barrierDismissible: false,
+                  context: context, builder: (context){
                   return AlertDialog(
-                    title: Text("Logout"),
-                    content: Text("Are you sure you want to logout?"),
+                    title: const Text("Logout"),
+                    content:const Text("Are you sure you want to logout?"),
+                    actions: [
+                      IconButton(onPressed:  () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.cancel, color: Colors.red,),
+                      ),
+
+
+                      IconButton(onPressed:  ()  async {
+                      await authService.signOut();
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> const LoginPage()),
+                      (route) => false);
+                       
+                      },
+                      icon: const Icon(Icons.done, color: Colors.green,),
+                      ),
+
+                    ],
                   );
                 });
                 authService.signOut().whenComplete(() {
