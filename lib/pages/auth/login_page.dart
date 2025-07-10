@@ -1,7 +1,11 @@
+import 'package:chatapp_firebase/helper/helper_function.dart';
 import 'package:chatapp_firebase/pages/auth/home_page.dart';
 import 'package:chatapp_firebase/pages/auth/register_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
+import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -138,6 +142,15 @@ class _LoginPageState extends State<LoginPage> {
       });
       await authService.loginWithUserNameandPassword( email, password).then((value) async {
          if(value== true) {
+          QuerySnapshot snapshot= await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
+
+          // saving the value to our shared preferences
+            await HelperFunctions.saveUserLoggedInStatus(true);
+          await HelperFunctions.saveUserEmailSF(email);
+          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
+
+
+
           
           nextScreenReplace(context, const HomePage());
 
