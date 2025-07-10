@@ -64,7 +64,28 @@ class _HomePageState extends State<HomePage> {
               height: 15,
 
             ),
-            Text(userName)
+            Text(userName,
+            textAlign: TextAlign.center,
+            style:const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Divider(
+              height: 2,
+            ),
+
+            ListTile(
+              onTap: (){},
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.group),
+              title: const Text("Groups",
+              style: TextStyle(color: Colors.black),
+              ),
+
+            )
 
            
           ],
