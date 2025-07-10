@@ -1,4 +1,6 @@
 import 'package:chatapp_firebase/helper/helper_function.dart';
+import 'package:chatapp_firebase/pages/auth/login_page.dart';
+import 'package:chatapp_firebase/pages/profile_page.dart';
 import 'package:chatapp_firebase/pages/search_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
@@ -76,7 +78,9 @@ class _HomePageState extends State<HomePage> {
             ),
 
             ListTile(
-              onTap: (){},
+              onTap: (){
+
+              },
               selectedColor: Theme.of(context).primaryColor,
               selected: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -85,7 +89,41 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(color: Colors.black),
               ),
 
+            ),
+             ListTile(
+              onTap: (){
+                nextScreen(context, const ProfilePage());
+              },
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.group),
+              title: const Text("Groups",
+              style: TextStyle(color: Colors.black),
+              ),
+
+            ),
+
+             ListTile(
+              onTap: () async {
+                showDialog(context: context, builder: (context){
+                  return AlertDialog(
+                    title: Text("Logout"),
+                    content: Text("Are you sure you want to logout?"),
+                  );
+                });
+                authService.signOut().whenComplete(() {
+                  nextScreenReplace(context, const LoginPage());
+                });
+              },
+            
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text("Logout",
+              style: TextStyle(color: Colors.black),
+              ),
+
             )
+
+
 
            
           ],
