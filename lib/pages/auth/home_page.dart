@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [IconButton(onPressed: (){
-          nextScreen(context, const SearchPage() );
+          nextScreenReplace(context, const SearchPage() );
         }, icon: const Icon(Icons.search))],
         elevation: 0,
         centerTitle: true,
@@ -92,7 +92,10 @@ class _HomePageState extends State<HomePage> {
             ),
              ListTile(
               onTap: (){
-                nextScreen(context, const ProfilePage());
+                nextScreenReplace(context,  ProfilePage(
+                  userName: userName,
+                  email: email,
+                ));
               },
               contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               leading: const Icon(Icons.group),
@@ -117,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                       },
                       icon: const Icon(Icons.cancel, color: Colors.red,),
                       ),
-
+                       
 
                       IconButton(onPressed:  ()  async {
                       await authService.signOut();
