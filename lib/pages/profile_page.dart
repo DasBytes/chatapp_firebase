@@ -126,6 +126,30 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 170),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.account_circle,
+              size: 200,
+              color: Colors.grey,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Full Name", style: TextStyle(fontSize: 17),),
+                Text(widget.userName, style: TextStyle(fontSize: 17),),
+              ],
+            )
+          ],
+        ),
+      ),
       
     );
   }
