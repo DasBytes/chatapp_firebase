@@ -3,7 +3,9 @@ import 'package:chatapp_firebase/pages/auth/login_page.dart';
 import 'package:chatapp_firebase/pages/profile_page.dart';
 import 'package:chatapp_firebase/pages/search_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
+import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
@@ -41,7 +43,13 @@ class _HomePageState extends State<HomePage> {
       });
 
     });
-  }
+
+      // getting the list pf snapshots in our stream
+  await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserGroups().then(sn) {
+    setState(() {
+      groups = snapshot;
+    });
+  }}
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +182,10 @@ class _HomePageState extends State<HomePage> {
 
   popUpDialog(BuildContext context) {}
   groupList() {
+    return StreamBuilder(
+      stream: groups,
+      builder: (context, snapshot),
+    );
 
   }
 }
