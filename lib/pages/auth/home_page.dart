@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   String email= "";
 
   AuthService authService = AuthService();
+  Stream? groups;
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Groups", style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),),
       ),
       drawer: Drawer(
+
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
           children: <Widget>[
@@ -153,6 +155,25 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    body: groupList(),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        popUpDialog(context);
+      },
+      elevation: 0,
+      backgroundColor: Theme.of(context).primaryColor,
+      child: const Icon(
+        Icons.add,
+        color: Colors.white,
+        size: 30,
+      ),
+      
+      ),
     );
+  }
+
+  popUpDialog(BuildContext context) {}
+  groupList() {
+
   }
 }

@@ -144,9 +144,19 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text("Full Name", style: TextStyle(fontSize: 17),),
-                Text(widget.userName, style: TextStyle(fontSize: 17),),
+                Text(widget.userName,  style: const TextStyle(fontSize: 17),),
               ],
-            )
+            ),
+            const Divider(
+              height: 20,
+            ),
+               Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Email", style: TextStyle(fontSize: 17),),
+                Text(widget.email,  style: const TextStyle(fontSize: 17),),
+              ],
+            ),
           ],
         ),
       ),
