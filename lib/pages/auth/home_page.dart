@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   AuthService authService = AuthService();
   Stream? groups;
   bool isLoading = false;
+  String groupName="",
 
   @override
   void initState() {
@@ -183,7 +184,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   popUpDialog(BuildContext context) {
-showDialog(context: context,
+
+showDialog(
+      barrierDismissible: true,
+  context: context,
  builder: (context){
   return AlertDialog(
     title: const Text(
@@ -200,12 +204,33 @@ showDialog(context: context,
           ),
         )
         : TextField(
+          onChanged: (value){
+            setState(() {
+              groupName: value;
+            });
+
+          },
+          style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Theme.of(context).primaryColor
               ),
-              borderRadius: BorderRadius.circular(30)
+              borderRadius: BorderRadius.circular(20)
+            ),
+
+
+             errorBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(20)
+            ),
+
+
+             focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor
+              ),
+              borderRadius: BorderRadius.circular(20)
             )
           ),
 
