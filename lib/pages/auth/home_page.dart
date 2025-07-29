@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   AuthService authService = AuthService();
   Stream? groups;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -181,7 +182,33 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  popUpDialog(BuildContext context) {}
+  popUpDialog(BuildContext context) {
+showDialog(context: context,
+ builder: (context){
+  return AlertDialog(
+    title: const Text(
+      "Create a group",
+      textAlign: TextAlign.left,
+    ),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        isLoading== true
+        ?Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        )
+        : TextField(
+          
+        ),
+      ],
+    ),
+  );
+ }
+ );
+  }
+
   groupList() {
     return StreamBuilder(
       stream: groups,
@@ -224,7 +251,7 @@ noGroupWidget() {
       children: [
         GestureDetector(
           onTap: () {
-            popUpDialog(context)
+            popUpDialog(context);
           },
           child: Icon(
             Icons.add_circle,
