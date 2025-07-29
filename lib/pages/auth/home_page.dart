@@ -297,6 +297,21 @@ showDialog(
 
        ElevatedButton(onPressed: () async {
 
+       if(groupName!="")
+       {
+        setState(() {
+          isLoading = true;
+        });
+        DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .createGroup(userName, 
+        FirebaseAuth.instance.currentUser!.uid, groupName)
+        .whenComplete((){
+          isLoading =false;
+        });
+        Navigator.of(context).pop();
+        showSnackBar(context,
+          Colors.green, "Group created successfully! ");
+       }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).primaryColor),
