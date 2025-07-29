@@ -200,7 +200,15 @@ showDialog(context: context,
           ),
         )
         : TextField(
-          
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor
+              ),
+              borderRadius: BorderRadius.circular(30)
+            )
+          ),
+
         ),
       ],
     ),
