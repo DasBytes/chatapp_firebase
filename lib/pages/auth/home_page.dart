@@ -6,7 +6,6 @@ import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,6 +17,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
+
+
+
+
+
+
+  noGroupWidget() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 25),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            popUpDialog(context);
+          },
+          child: Icon(
+            Icons.add_circle,
+            color: Colors.grey[700],
+            size: 75,
+            ),
+        ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text("You have not joined any groups, tap on the add icon to create a group or also search from top search button.",
+          textAlign: TextAlign.center,
+          )
+      ],
+    ),
+  );
+}
+
+
+
+
+
+
+
 
   String userName = "";
   String email= "";
@@ -210,7 +252,7 @@ showDialog(
         : TextField(
           onChanged: (value){
             setState(() {
-              group: value;
+             groupName = value; 
             });
 
           },
@@ -290,30 +332,3 @@ showDialog(
 }
 }
 
-noGroupWidget() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 25),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          onTap: () {
-            popUpDialog(context);
-          },
-          child: Icon(
-            Icons.add_circle,
-            color: Colors.grey[700],
-            size: 75,
-            ),
-        ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Text("You have not joined any groups, tap on the add icon to create a group or also search from top search button.",
-          textAlign: TextAlign.center,
-          )
-      ],
-    ),
-  )
-}
