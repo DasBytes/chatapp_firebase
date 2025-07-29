@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   AuthService authService = AuthService();
   Stream? groups;
   bool isLoading = false;
-  String groupName="",
+  String groupName="";
 
   @override
   void initState() {
@@ -48,11 +48,15 @@ class _HomePageState extends State<HomePage> {
     });
 
       // getting the list pf snapshots in our stream
-  await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserGroups().then(snapshot) {
-    setState(() {
-      groups = snapshot;
+await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getUserGroups()
+        .then((snapshot) {
+      setState(() {
+        groups = snapshot;
+      });
     });
-  }}
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +210,7 @@ showDialog(
         : TextField(
           onChanged: (value){
             setState(() {
-              groupName: value;
+              group: value;
             });
 
           },
@@ -237,6 +241,17 @@ showDialog(
         ),
       ],
     ),
+    actions: [
+      ElevatedButton(onPressed: (){
+
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).primaryColor),
+        child: const Text("Cancel"),
+      
+      
+      )
+    ],
   );
  }
  );
