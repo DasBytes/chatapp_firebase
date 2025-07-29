@@ -45,7 +45,15 @@ class DatabaseService {
       "admin": "${id}_$userName",
       "members": [],
       "groupId": "",
+      "recentMessage": "",
+      "recentMessageSender": "",
     });
+
+    // update the members 
+    await documentReference.update({
+      "members": FieldValue.arrayUnion(["${uid}_$userName"]),
+      "groupId": documentReference.id,
+    })
   }
 
 }
