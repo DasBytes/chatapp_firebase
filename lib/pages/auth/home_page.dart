@@ -232,7 +232,7 @@ await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
   popUpDialog(BuildContext context) {
 
 showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
   context: context,
  builder: (context){
   return AlertDialog(
@@ -285,12 +285,23 @@ showDialog(
     ),
     actions: [
       ElevatedButton(onPressed: (){
+        Navigator.of(context).pop();
 
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).primaryColor),
         child: const Text("Cancel"),
+    
       
+      ),
+
+       ElevatedButton(onPressed: () async {
+
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).primaryColor),
+        child: const Text("Create"),
+    
       
       )
     ],
