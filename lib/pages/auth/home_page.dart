@@ -285,7 +285,7 @@ showDialog(
           ),
         ],
       ),
-      actions: [
+       [
         ElevatedButton(onPressed: (){
           Navigator.of(context).pop();
     
