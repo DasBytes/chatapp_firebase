@@ -89,15 +89,15 @@ class _HomePageState extends State<HomePage> {
 
     });
 
-//       // getting the list pf snapshots in our stream
-// await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-//         .getUserGroups()
-//         .then((snapshot) {
-//       setState(() {
-//         groups = snapshot;
-//       });
-//     });
-//   }
+      // getting the list pf snapshots in our stream
+await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getUserGroups()
+        .then((snapshot) {
+      setState(() {
+        groups = snapshot;
+      });
+    });
+  }
 
 
   @override
