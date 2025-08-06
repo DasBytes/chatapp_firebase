@@ -4,6 +4,7 @@ import 'package:chatapp_firebase/pages/profile_page.dart';
 import 'package:chatapp_firebase/pages/search_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
+import 'package:chatapp_firebase/widgets/group_tile.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,6 +76,17 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     gettingUserData();
   }
+
+
+
+// string manipulation
+
+String getId(String res){
+  return res.substring(0, res.indexOf("_"));
+}
+String getName(String res){
+  return res.substring(res.indexOf("_")+1);
+}
 
   gettingUserData() async {
     await HelperFunctions.getUserEmailFromSF().then((value) {
@@ -339,7 +351,9 @@ showDialog(
               return ListView.builder(
                 itemCount: snapshot.data['Groups'].length,
                 itemBuilder: (context, index) {
-                  return Text("Hello");
+                  return GroupTile(groupId: getId(snapshot.data['groups'][index]), 
+                  groupName: getName(snapshot.data['groups'][index]),
+                   userName: snapshot.data['fullname']);
                 }
                 );
             }
