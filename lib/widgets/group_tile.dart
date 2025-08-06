@@ -18,8 +18,9 @@ class GroupTile extends StatefulWidget {
 class _GroupTileState extends State<GroupTile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-    )
+    return ListTile(
+      title: Text(widget.groupId),
+      subtitle: Text(widget.groupName),
+    );
   }
 }
