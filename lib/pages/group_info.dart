@@ -42,6 +42,10 @@ String getName(String r)
   return r.substring(r.indexOf("_")+1);
 }
 
+String getId(String res){
+  return res.substring(0, res.indexOf("_"));
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +141,7 @@ String getName(String r)
                       ),
                     ),
                     title: Text(getName(snapshot.data['members'][index])),
-                    subtitle: Text(),
+                    subtitle: Text(getId(snapshot.data['members'][index])),
                   ),
                 );
               },
@@ -158,8 +162,11 @@ String getName(String r)
         }
         else{
           return Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
 
-          )
+          );
         }
       });
     }
