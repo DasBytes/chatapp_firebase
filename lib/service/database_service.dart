@@ -77,4 +77,10 @@ Future getGroupAdmin(String groupId) async {
   return documentSnapshot['admin'];
 }
 
+// get members
+
+getGroupsMembers(groupId) async {
+  return groupCollection.doc(groupId).snapshots();
+}
+
 }
