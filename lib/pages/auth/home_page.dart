@@ -5,6 +5,7 @@ import 'package:chatapp_firebase/pages/search_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -335,7 +336,12 @@ showDialog(
         if(snapshot.hasData){
           if(snapshot.data['groups']!=null){
             if(snapshot.data['groups'].length!=0){
-              return Text("Hello");
+              return ListView.builder(
+                itemCount: snapshot.data['Groups'].length,
+                itemBuilder: (context, index) {
+                  return Text("Hello");
+                }
+                );
             }
              else
             {
