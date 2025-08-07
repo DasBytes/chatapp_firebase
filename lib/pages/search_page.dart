@@ -132,8 +132,13 @@ class _SearchPageState extends State<SearchPage> {
     itemCount: searchSnapshot!.docs.length,
     itemBuilder: (context, index){
       return GroupTile(
+        userName,
+        searchSnapshot!.docs[index]['groupId'],
+        searchSnapshot!.docs[index]['groupName'],
+        searchSnapshot!.docs[index]['admin'],
+        
 
-      )
+      );
     },
     
     )
