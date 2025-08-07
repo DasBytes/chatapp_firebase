@@ -1,3 +1,4 @@
+import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -10,6 +11,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 
   TextEditingController searchController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   GestureDetector(
                     onTap: (){
-
+                  initiateSearchMethod();
                     },
                     child: Container(
                       width: 40,
@@ -64,9 +66,30 @@ class _SearchPageState extends State<SearchPage> {
                   )
               ],
             ),
+          ),
+          isLoading
+          ? Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ),
           )
+          : groupList()
         ],
       ),
     );
+  }
+
+  initiateSearchMethod() async
+  {
+   if(searchController.text.isNotEmpty){
+    setState(() {
+      isLoading= true;
+    });
+    await DatabaseService()
+   }
+  }
+
+  groupList() {
+
   }
 }
