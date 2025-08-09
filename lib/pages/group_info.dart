@@ -1,4 +1,6 @@
+import 'package:chatapp_firebase/pages/auth/home_page.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
+import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +58,34 @@ String getId(String res){
         title: const Text("Groups Info"),
         actions: [
           IconButton(onPressed: (){
+                    showDialog(
+                  barrierDismissible: false,
+                  context: context, builder: (context){
+                  return AlertDialog(
+                    title: const Text("Exit"),
+                    content:const Text("Are you sure you want to exit the group?"),
+                    actions: [
+                      IconButton(onPressed:  () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.cancel, color: Colors.red,),
+                      ),
+                       
+
+                      IconButton(onPressed:  ()  async {
+                     DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                     .toggleGroupJoin(widget.groupId, getName(widget.adminName), widget.groupName)
+                     .whenComplete((){
+                      nextScreenReplace(context, const HomePage());
+                     });
+                       
+                      },
+                      icon: const Icon(Icons.done, color: Colors.green,),
+                      ),
+
+                    ],
+                  );
+                });
 
           },
            icon: const Icon(Icons.exit_to_app))
@@ -105,7 +135,7 @@ String getId(String res){
                 ],
               ),
             ),
-            memberList();
+            memberList()
           ],
         ),
       ),
