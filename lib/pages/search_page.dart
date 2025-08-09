@@ -39,6 +39,14 @@ class _SearchPageState extends State<SearchPage> {
   }
 
 
+String getName(String r)
+{
+  return r.substring(r.indexOf("_")+1);
+}
+
+String getId(String res){
+  return res.substring(0, res.indexOf("_"));
+}
 
 
   @override
@@ -168,6 +176,28 @@ Widget groupTile(String userName, String groupId, String groupName, String admin
       groupName.substring(0,1).toUpperCase(),
       style: const TextStyle(color: Colors.white),
     ),
+
+  ),
+  title: Text(
+    groupName, style: const TextStyle(fontWeight: FontWeight.w600),
+  ),
+  subtitle: Text("Admin: ${getName(admin)}"),
+  trailing: InkWell(
+    onTap: ()  async{},
+    child: isJoined
+    ? Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.black,
+        border: Border.all(color: Colors.white, width: 1),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: const Text(
+        "joined",
+        style: TextStyle(color: Colors.white),
+      ),
+    )
+    : Container()
   ),
  );
 }
