@@ -1,5 +1,7 @@
 import 'package:chatapp_firebase/helper/helper_function.dart';
+import 'package:chatapp_firebase/pages/auth/chat_page.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
+import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -183,7 +185,27 @@ Widget groupTile(String userName, String groupId, String groupName, String admin
   ),
   subtitle: Text("Admin: ${getName(admin)}"),
   trailing: InkWell(
-    onTap: ()  async{},
+    onTap: ()  async{
+      await DatabaseService(uid: user!.uid)
+      .toggleGroupJoin(groupId, userName, groupName);
+      if(isJoined) {
+        setState(() {
+          isJoined = !isJoined;
+        });
+        showSnackBar(context, Colors.green, "Successfully joined the group");
+        Future.delayed(const Duration(seconds: 2), (){
+          nextScreen(context, const ChatPage(groupId: groupId, groupName: groupName, userName: userName));
+        });
+      }
+      else {
+        setState(() {
+          isJoined =!isJoined;
+          showSnackBar(context, Colors.red, "Left the group $groupName");
+        });
+      }
+
+
+    },
     child: isJoined
     ? Container(
       decoration: BoxDecoration(
