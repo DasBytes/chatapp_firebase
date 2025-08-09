@@ -63,6 +63,7 @@ class _ChatPageState extends State<ChatPage> {
            icon: const Icon(Icons.info))
         ],
       ),
+      
     );
   }
 }
