@@ -19,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched = false;
   String userName="";
+  bool isJoined = false;
   User? user;
 
   @override
@@ -131,7 +132,7 @@ class _SearchPageState extends State<SearchPage> {
     shrinkWrap: true,
     itemCount: searchSnapshot!.docs.length,
     itemBuilder: (context, index){
-      return GroupTile(
+      return groupTile(
         userName,
         searchSnapshot!.docs[index]['groupId'],
         searchSnapshot!.docs[index]['groupName'],
@@ -145,9 +146,20 @@ class _SearchPageState extends State<SearchPage> {
     : Container();
   }
 
-Widget groupTile(
-  String userName, String groupId, String groupName, String admin
-){
+joinedOrNot(String userName, String groupId, String groupName, String admin) async {
+  await DatabaseService(uid: user!.uid).isUserJoined(groupName, groupId, userName).then((value) {
+    setState(() {
+      isJoined = value;
+    });
+  },
+}
+
+
+Widget groupTile(String userName, String groupId, String groupName, String admin)
+{
+  // function to check whether user already exists in group
+  joinedOrNot(userName, groupId, groupName, admin);
+
   return Text("Hello!");
 }
 
