@@ -1,6 +1,5 @@
 import 'package:chatapp_firebase/helper/helper_function.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
-import 'package:chatapp_firebase/widgets/group_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +150,7 @@ joinedOrNot(String userName, String groupId, String groupName, String admin) asy
     setState(() {
       isJoined = value;
     });
-  },
+  });
 }
 
 
@@ -160,7 +159,17 @@ Widget groupTile(String userName, String groupId, String groupName, String admin
   // function to check whether user already exists in group
   joinedOrNot(userName, groupId, groupName, admin);
 
-  return Text("Hello!");
+ return ListTile(
+  contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+  leading: CircleAvatar(
+    radius: 30,
+    backgroundColor: Theme.of(context).primaryColor,
+    child: Text(
+      groupName.substring(0,1).toUpperCase(),
+      style: const TextStyle(color: Colors.white),
+    ),
+  ),
+ );
 }
 
 }
