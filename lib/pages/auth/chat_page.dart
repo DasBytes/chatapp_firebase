@@ -63,7 +63,27 @@ class _ChatPageState extends State<ChatPage> {
            icon: const Icon(Icons.info))
         ],
       ),
-      
+      body: Stack(
+        children: <Widget> [
+          //chat messages here
+          chatMessages(),
+          Container(
+            alignment: Alignment.bottomCenter,
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              color: Colors.grey[700],
+              child: Row(children: [Expanded(child: TextFormField(
+                controller: ,
+              ))],),
+            ),
+          )
+        ],
+      ),
     );
+  }
+
+  chatMessages() {
+    
   }
 }
