@@ -194,7 +194,7 @@ Widget groupTile(String userName, String groupId, String groupName, String admin
         });
         showSnackBar(context, Colors.green, "Successfully joined the group");
         Future.delayed(const Duration(seconds: 2), (){
-          nextScreen(context, const ChatPage(groupId: groupId, groupName: groupName, userName: userName));
+          nextScreen(context, ChatPage(groupId: groupId, groupName: groupName, userName: userName));
         });
       }
       else {
