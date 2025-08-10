@@ -6,16 +6,15 @@ class AuthService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   // Login
-
- Future loginWithUserNameandPassword(
-      String email, String password) async {
+  Future loginWithUserNameandPassword(String email, String password) async {
     try {
-      User user = (await firebaseAuth.signInWithEmailAndPassword(
-              email: email, password: password))
-          .user!;
+      User? user = (await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      ))
+          .user;
 
       if (user != null) {
-        
         return true;
       }
     } on FirebaseAuthException catch (e) {
@@ -23,14 +22,15 @@ class AuthService {
     }
   }
 
-
   // Register
   Future registerUserWithEmailandPassword(
       String fullName, String email, String password) async {
     try {
-      User user = (await firebaseAuth.createUserWithEmailAndPassword(
-              email: email, password: password))
-          .user!;
+      User? user = (await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      ))
+          .user;
 
       if (user != null) {
         // call our database to update the user data
@@ -43,16 +43,14 @@ class AuthService {
   }
 
   // Signout
-
   Future signOut() async {
-    try{
+    try {
       await HelperFunctions.saveUserLoggedInStatus(false);
       await HelperFunctions.saveUserEmailSF("");
       await HelperFunctions.saveUserNameSF("");
       await firebaseAuth.signOut();
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
-
 }
