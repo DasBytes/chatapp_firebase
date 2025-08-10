@@ -27,6 +27,7 @@ class _MessageTileState extends State<MessageTile> {
         bottom: 4,
         left: widget.sentByMe ? 0 : 24,
         right: widget.sentByMe ? 24 : 0
+      
       ),
       alignment: widget.sentByMe? Alignment.centerRight : Alignment.centerLeft,
       
@@ -57,12 +58,12 @@ class _MessageTileState extends State<MessageTile> {
             Text(
               widget.sender.toUpperCase(),
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13,fontWeight: FontWeight.bold ),
+              style: const TextStyle(fontSize: 13,fontWeight: FontWeight.bold, color:Colors.white, letterSpacing: -0.5 ),
             ),
             const SizedBox(
               height: 8,
             ),
-            Text(widget.message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16),)
+            Text(widget.message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: Colors.white),)
           ],
         ),
       ),
