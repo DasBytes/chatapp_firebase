@@ -1,5 +1,6 @@
 import 'package:chatapp_firebase/pages/group_info.dart';
 import 'package:chatapp_firebase/service/database_service.dart';
+import 'package:chatapp_firebase/widgets/message_tile.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Stack(
         children: <Widget> [
           //chat messages here
-          // chatMessages(),
+          chatMessages(),
           Container(
             alignment: Alignment.bottomCenter,
             width: MediaQuery.of(context).size.width,
@@ -128,15 +129,26 @@ class _ChatPageState extends State<ChatPage> {
         itemCount: snapshot.data.docs.length,
         
         itemBuilder: (context, index){
-
+          return MessageTile(
+            message: snapshot.data.docs[index]['message'],
+           sender: snapshot.data.docs[index]['sender'],
+            sentByMe: widget.userName == snapshot.data.docs[index]['sender']);
+             
         },
       )
-      : Container()
+      : Container();
      },
    );
   }
 
   sendMessage(){
-
+      if(messageController.text.isNotEmpty){
+        Map<String, dynamic> chatMessageMap = {
+          "message": messageController.text,
+          "sender": widget.userName,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        };
+        DatabaseService().sendMessage()
+      }
   }
 }
