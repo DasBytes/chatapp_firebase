@@ -67,7 +67,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Stack(
         children: <Widget> [
           //chat messages here
-          chatMessages(),
+          // chatMessages(),
           Container(
             alignment: Alignment.bottomCenter,
             width: MediaQuery.of(context).size.width,
@@ -84,7 +84,34 @@ class _ChatPageState extends State<ChatPage> {
                   border: InputBorder.none,
                 ),
                
-              ))],),
+              )),
+                 
+               const SizedBox(
+                width: 12,
+               ),
+               GestureDetector(
+                onTap: () {
+                  sendMessage();
+
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(30),
+
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+               )
+              ],
+              ),
             ),
           )
         ],
