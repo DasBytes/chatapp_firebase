@@ -20,8 +20,23 @@ class MessageTile extends StatefulWidget {
 class _MessageTileState extends State<MessageTile> {
   @override
   Widget build(BuildContext context) {
+
     return Container(
       
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.sender.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 13,fontWeight: FontWeight.bold ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(widget.message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16),)
+        ],
+      ),
     );
   }
 }
