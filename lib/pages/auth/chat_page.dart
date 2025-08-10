@@ -120,6 +120,23 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   chatMessages() {
+   return StreamBuilder(
+    stream: chats,
+     builder: (context, AsyncSnapshot snapshot) {
+      return snapshot.hasData
+      ? ListView.builder(
+        itemCount: snapshot.data.docs.length,
+        
+        itemBuilder: (context, index){
+
+        },
+      )
+      : Container()
+     },
+   );
+  }
+
+  sendMessage(){
 
   }
 }
