@@ -148,7 +148,10 @@ class _ChatPageState extends State<ChatPage> {
           "sender": widget.userName,
           "time": DateTime.now().millisecondsSinceEpoch,
         };
-        DatabaseService().sendMessage()
+        DatabaseService().sendMessage(widget.groupId, chatMessageMap);
+        setState(() {
+          messageController.clear();
+        });
       }
   }
 }

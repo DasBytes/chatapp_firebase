@@ -20,6 +20,8 @@ class MessageTile extends StatefulWidget {
 class _MessageTileState extends State<MessageTile> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      
+    );
   }
 }
