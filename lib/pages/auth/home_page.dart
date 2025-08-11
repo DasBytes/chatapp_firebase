@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     gettingUserData();
   }
 
-// string manipulation
+  // string manipulation
 
   String getId(String res) {
     return res.substring(0, res.indexOf("_"));
@@ -290,7 +290,9 @@ class _HomePageState extends State<HomePage> {
                           .createGroup(userName,
                               FirebaseAuth.instance.currentUser!.uid, groupName)
                           .whenComplete(() {
-                        isLoading = false;
+                        setState(() {
+                          isLoading = false;
+                        });
                       });
                       Navigator.of(context).pop();
                       showSnackBar(
@@ -319,10 +321,10 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     int reverseIndex = snapshot.data['groups'].length - index - 1;
                     return GroupTile(
-                        groupId: getId(snapshot.data['groups'][reverseIndex]),
-                        groupName: getName(snapshot.data['groups'][reverseIndex]),
-                        userName: userName // FIXED here (was snapshot.data['fullname'] which is incorrect)
-                        );
+                      groupId: getId(snapshot.data['groups'][reverseIndex]),
+                      groupName: getName(snapshot.data['groups'][reverseIndex]),
+                      userName: userName,
+                    );
                   });
             } else {
               return noGroupWidget();

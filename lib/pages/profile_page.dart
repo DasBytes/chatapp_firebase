@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:chatapp_firebase/pages/auth/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  String userName;
-  String email;
-  ProfilePage({super.key, required this.email, required this.userName});
+  final String userName;
+  final String email;
+  const ProfilePage({super.key, required this.email, required this.userName});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -15,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-            // Removed duplicate "Groups" tile here
-
             ListTile(
               onTap: () async {
                 showDialog(
@@ -81,6 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         IconButton(
                           onPressed: () async {
                             await authService.signOut();
+                            if (!mounted) return;
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (context) => const LoginPage()),
@@ -93,7 +93,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   },
                 );
-                // Removed duplicate logout call here
               },
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -111,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(
+            const Icon(
               Icons.account_circle,
               size: 200,
               color: Colors.grey,

@@ -6,11 +6,12 @@ class GroupTile extends StatefulWidget {
   final String userName;
   final String groupId;
   final String groupName;
+
   const GroupTile({
-    Key?key,
+    Key? key,
     required this.groupId,
     required this.groupName,
-    required this.userName
+    required this.userName,
   }) : super(key: key);
 
   @override
@@ -22,11 +23,14 @@ class _GroupTileState extends State<GroupTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        nextScreen(context,  ChatPage(
-           groupId: widget.groupId,
-           groupName: widget.groupName,
-           userName: widget.userName,
-        ));
+        nextScreen(
+          context,
+          ChatPage(
+            groupId: widget.groupId,
+            groupName: widget.groupName,
+            userName: widget.userName,
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -35,10 +39,13 @@ class _GroupTileState extends State<GroupTile> {
             radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
             child: Text(
-              widget.groupName.substring(0,1).toUpperCase(),
+              widget.groupName.isNotEmpty
+                  ? widget.groupName.substring(0, 1).toUpperCase()
+                  : "?",
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w500
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -46,9 +53,9 @@ class _GroupTileState extends State<GroupTile> {
             widget.groupName,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          subtitle: Text("Join the conversation as ${widget.userName}",
-          style: const TextStyle(fontSize: 13),
-          
+          subtitle: Text(
+            "Join the conversation as ${widget.userName}",
+            style: const TextStyle(fontSize: 13),
           ),
         ),
       ),
