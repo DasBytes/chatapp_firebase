@@ -26,6 +26,7 @@ void main() async
 
          // run the intialization for web
          await Firebase.initializeApp();
+           runApp(const MyApp()); 
 
 
 
