@@ -3,58 +3,54 @@ import 'package:chatapp_firebase/service/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   // Login
-  Future<String?> loginWithUserNameAndPassword(String email, String password) async {
+  Future loginWithUserNameandPassword(String email, String password) async {
     try {
-      User? user = (await _firebaseAuth.signInWithEmailAndPassword(
+      User? user = (await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       ))
           .user;
 
       if (user != null) {
-        // Save user info locally
-        await HelperFunctions.saveUserLoggedInStatus(true);
-        await HelperFunctions.saveUserEmailSF(email);
-        return null; // null means success
+        return true;
       }
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
-    return "Unknown error occurred";
   }
 
   // Register
-  Future<String?> registerUserWithEmailAndPassword(String fullName, String email, String password) async {
+  Future registerUserWithEmailandPassword(
+      String fullName, String email, String password) async {
     try {
-      User? user = (await _firebaseAuth.createUserWithEmailAndPassword(
+      User? user = (await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       ))
           .user;
 
       if (user != null) {
+        // call our database to update the user data
         await DatabaseService(uid: user.uid).savingUserData(fullName, email);
-        await HelperFunctions.saveUserLoggedInStatus(true);
-        await HelperFunctions.saveUserNameSF(fullName);
-        await HelperFunctions.saveUserEmailSF(email);
-        return null; // success
+        return true;
       }
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
-    return "Unknown error occurred";
   }
 
-  // Sign out
-  Future<void> signOut() async {
+  // Signout
+  Future signOut() async {
     try {
       await HelperFunctions.saveUserLoggedInStatus(false);
       await HelperFunctions.saveUserEmailSF("");
       await HelperFunctions.saveUserNameSF("");
-      await _firebaseAuth.signOut();
-    } catch (_) {}
+      await firebaseAuth.signOut();
+    } catch (e) {
+      return null;
+    }
   }
 }
