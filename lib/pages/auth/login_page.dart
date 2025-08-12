@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Text("Login now to see what they are talking!",
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                Image.asset("assets/login.png"),
+                Image.asset("assets/login.jpg"),
                 TextFormField(
                   decoration: textInputDecoration.copyWith(
                       labelText: "Email",

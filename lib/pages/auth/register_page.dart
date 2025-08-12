@@ -41,7 +41,7 @@ return Scaffold(
                 const Text("Create your account now to chat and explore ",
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
-                Image.asset("assets/register.png"),
+                Image.asset("assets/register.jpg"),
                      TextFormField(
                   decoration: textInputDecoration.copyWith(
                       labelText: "Full Name",
