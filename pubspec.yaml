@@ -60,7 +60,7 @@ flutter:
 
 
   assets:
-    - assets/login.jpg
+    - assets/login.png
     - assets/register.jpg
     - assets/me.jpg
 

@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                         "Login now to see what they are talking!",
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                       ),
-                      Image.asset("assets/login.jpg"),
+                      Image.asset("assets/login.png"),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(
                           labelText: "Email",
