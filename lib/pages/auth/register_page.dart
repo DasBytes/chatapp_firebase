@@ -34,11 +34,11 @@ return Scaffold(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Text("Groupie!",
+                const Text("Vibric",
                     style:
                         TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
-                const Text("Create your account now to chat and explore ",
+                const Text("Join now and connect with everyone!",
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
                 Image.asset("assets/register.jpg"),
