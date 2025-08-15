@@ -42,6 +42,7 @@ return Scaffold(
                     style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.w400)),
                 Image.asset("assets/register.jpg"),
+
                      TextFormField(
                   decoration: textInputDecoration.copyWith(
                       labelText: "Full Name",
