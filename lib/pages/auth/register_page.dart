@@ -1,7 +1,7 @@
 import 'package:chatapp_firebase/helper/helper_function.dart';
-import 'package:chatapp_firebase/pages/auth/home_page.dart';
 import 'package:chatapp_firebase/service/auth_service.dart';
 import 'package:chatapp_firebase/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:chatapp_firebase/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
@@ -157,32 +157,59 @@ return Scaffold(
     );
   }
 
+register() async {
+  if (formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
 
-  register() async{
-    if(formKey.currentState!.validate()){
-      setState(() {
-        _isLoading = true;
-      });
-      await authService.registerUserWithEmailandPassword(fullName, email, password).then((value) async {
-         if(value== true) {
-          await HelperFunctions.saveUserLoggedInStatus(true);
-          await HelperFunctions.saveUserEmailSF(email);
-          await HelperFunctions.saveUserNameSF(fullName);
-          nextScreenReplace(context, const HomePage());
+    // Register user
+    await authService
+        .registerUserWithEmailandPassword(fullName, email, password)
+        .then((value) async {
+      if (value == true) {
+        // Send email verification
+        User? user = FirebaseAuth.instance.currentUser;
+        await user!.sendEmailVerification();
 
+        // Save user data in SharedPreferences
+        await HelperFunctions.saveUserLoggedInStatus(false); // cannot login yet
+        await HelperFunctions.saveUserEmailSF(email);
+        await HelperFunctions.saveUserNameSF(fullName);
 
-        }
-        else {
-          showSnackBar(context, Colors.red, value);
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      },);
-       
+        setState(() {
+          _isLoading = false;
+        });
+
+        // Show confirmation dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Verify your email"),
+            content: Text(
+                "A verification email has been sent to $email. Please check your inbox and verify before logging in."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Redirect to login page
+                  nextScreenReplace(context, const LoginPage());
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        showSnackBar(context, Colors.red, value);
+        setState(() {
+          _isLoading = false;
+        });
       }
-    }
-
+    });
   }
+}
+}
 
 

@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 80),
                 child: Form(
                   key: formKey,
                   child: Column(
@@ -46,14 +48,17 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       const Text(
                         "Groupie!",
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
                       const Text(
                         "Login now to see what they are talking!",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w400),
                       ),
                       Image.asset("assets/login.png"),
+                      const SizedBox(height: 20),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(
                           labelText: "Email",
@@ -117,15 +122,52 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 10),
+                      // Google Sign-In Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: Image.asset(
+                            'assets/google-logo.png',
+                            height: 24,
+                          ),
+                          label: const Text(
+                            "Sign in with Google",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: signInWithGoogle,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () {
+                          showForgotPasswordDialog();
+                        },
+                        child: const Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Text.rich(
                         TextSpan(
                           text: "Don't have an account? ",
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style:
+                              const TextStyle(color: Colors.black, fontSize: 14),
                           children: <TextSpan>[
                             TextSpan(
                               text: "Register here",
                               style: const TextStyle(
-                                  color: Colors.black, decoration: TextDecoration.underline),
+                                  color: Colors.black,
+                                  decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   nextScreen(context, const RegisterPage());
@@ -142,6 +184,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // Email/Password Login
   login() async {
     if (formKey.currentState!.validate()) {
       setState(() {
@@ -152,8 +195,44 @@ class _LoginPageState extends State<LoginPage> {
         var value = await authService.loginWithUserNameandPassword(email, password);
 
         if (value == true) {
-          QuerySnapshot snapshot =
-              await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
+          User? user = FirebaseAuth.instance.currentUser;
+
+          if (user != null && !user.emailVerified) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => AlertDialog(
+                title: const Text("Email not verified"),
+                content: Text(
+                    "Please verify your email ($email) before logging in. Check your inbox."),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      await user.sendEmailVerification();
+                      Navigator.of(context).pop();
+                      showSnackBar(context, Colors.green,
+                          "Verification email resent to $email");
+                    },
+                    child: const Text("Resend Email"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              ),
+            );
+            setState(() {
+              _isLoading = false;
+            });
+            return;
+          }
+
+          QuerySnapshot snapshot = await DatabaseService(
+                  uid: FirebaseAuth.instance.currentUser!.uid)
+              .gettingUserData(email);
 
           await HelperFunctions.saveUserLoggedInStatus(true);
           await HelperFunctions.saveUserEmailSF(email);
@@ -173,5 +252,119 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
+  }
+
+
+
+
+signInWithGoogle() async {
+  setState(() {
+    _isLoading = true;
+  });
+
+final GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: ['email'],
+);
+
+
+
+  try {
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser == null) {
+      setState(() => _isLoading = false);
+      return; // User canceled
+    }
+
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    if (googleAuth.idToken == null) {
+      showSnackBar(context, Colors.red, "Google sign-in failed. Try again.");
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    final credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken!, // Only idToken is needed
+    );
+
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    User? user = userCredential.user;
+    if (user != null) {
+      QuerySnapshot snapshot =
+          await DatabaseService(uid: user.uid).gettingUserData(user.email!);
+
+      if (snapshot.docs.isEmpty) {
+        await DatabaseService(uid: user.uid)
+            .savingUserData(user.displayName!, user.email!);
+        await HelperFunctions.saveUserNameSF(user.displayName!);
+      } else {
+        await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
+      }
+
+      await HelperFunctions.saveUserLoggedInStatus(true);
+      await HelperFunctions.saveUserEmailSF(user.email!);
+
+      nextScreenReplace(context, const HomePage());
+    }
+  } catch (e) {
+    showSnackBar(context, Colors.red, e.toString());
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+}
+
+
+  // Forgot Password
+  void showForgotPasswordDialog() {
+    String resetEmail = "";
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text("Reset Password"),
+        content: TextField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(
+            labelText: "Enter your registered email",
+            hintText: "example@email.com",
+          ),
+          onChanged: (val) {
+            resetEmail = val;
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (resetEmail.isNotEmpty &&
+                  RegExp(r"^[a-zA-Z0-9.!#$%&'*+-=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                      .hasMatch(resetEmail)) {
+                try {
+                  await FirebaseAuth.instance
+                      .sendPasswordResetEmail(email: resetEmail);
+                  Navigator.of(context).pop();
+                  showSnackBar(context, Colors.green,
+                      "Password reset link sent to $resetEmail");
+                } catch (e) {
+                  showSnackBar(context, Colors.red, e.toString());
+                }
+              } else {
+                showSnackBar(context, Colors.red, "Please enter a valid email");
+              }
+            },
+            child: const Text("Send"),
+          ),
+        ],
+      ),
+    );
   }
 }
