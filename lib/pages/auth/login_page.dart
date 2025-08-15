@@ -27,6 +27,9 @@ class _LoginPageState extends State<LoginPage> {
   AuthService authService = AuthService();
   StreamSubscription? internetSubscription;
 
+  // Create GoogleSignIn instance globally
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
   @override
   void initState() {
     super.initState();
@@ -216,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Email/Password Login with internet check
+  // Email/Password Login
   login() async {
     if (!await hasInternetConnection()) {
       showSnackBar(
@@ -293,7 +296,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Google Sign-In with internet check
+  // Google Sign-In
   signInWithGoogle() async {
     if (!await hasInternetConnection()) {
       showSnackBar(
@@ -305,11 +308,10 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email'],
-    );
-
     try {
+      // Disconnect previous account to show chooser
+      await googleSignIn.disconnect();
+
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
         setState(() => _isLoading = false);
