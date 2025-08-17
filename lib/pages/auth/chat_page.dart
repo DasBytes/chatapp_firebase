@@ -77,7 +77,6 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: Stack(
         children: <Widget>[
-          // chat messages here
           chatMessages(),
           Container(
             alignment: Alignment.bottomCenter,
@@ -131,17 +130,22 @@ class _ChatPageState extends State<ChatPage> {
       stream: chats,
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData) {
+          var docs = snapshot.data!.docs;
+          // sort by time so new messages go to bottom
+          docs.sort((a, b) => a["time"].compareTo(b["time"]));
+
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            reverse: true, // newest messages at bottom
-            padding: const EdgeInsets.only(bottom: 70),
+            itemCount: docs.length,
+            padding: const EdgeInsets.only(bottom: 70, top: 10),
             itemBuilder: (context, index) {
-              final data = snapshot.data!.docs[index];
+              final data = docs[index];
               return MessageTile(
-                message: data['message'],
-                sender: data['sender'],
-                sentByMe: widget.userName == data['sender'],
-              );
+  message: data['message']?.toString() ?? "",
+  sender: data['sender']?.toString() ?? "",
+  sentByMe: widget.userName == data['sender']?.toString(),
+  time: DateTime.fromMillisecondsSinceEpoch(data['time']),
+);
+
             },
           );
         } else {

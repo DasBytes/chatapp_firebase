@@ -297,69 +297,71 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Google Sign-In
-  signInWithGoogle() async {
-    if (!await hasInternetConnection()) {
-      showSnackBar(
-          context, Colors.red, "You are offline. Please connect to the internet.");
+signInWithGoogle() async {
+  if (!await hasInternetConnection()) {
+    showSnackBar(
+        context, Colors.red, "You are offline. Please connect to the internet.");
+    return;
+  }
+
+  setState(() {
+    _isLoading = true;
+  });
+
+  try {
+    // Sign out previous Google session if any
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.signOut();
+    }
+
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser == null) {
+      setState(() => _isLoading = false);
+      return; // User canceled
+    }
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    if (googleAuth.idToken == null) {
+      showSnackBar(context, Colors.red, "Google sign-in failed. Try again.");
+      setState(() => _isLoading = false);
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    final credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken!,
+    );
 
-    try {
-      // Disconnect previous account to show chooser
-      await googleSignIn.disconnect();
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser == null) {
-        setState(() => _isLoading = false);
-        return; // User canceled
+    User? user = userCredential.user;
+    if (user != null) {
+      QuerySnapshot snapshot =
+          await DatabaseService(uid: user.uid).gettingUserData(user.email!);
+
+      if (snapshot.docs.isEmpty) {
+        await DatabaseService(uid: user.uid)
+            .savingUserData(user.displayName!, user.email!);
+        await HelperFunctions.saveUserNameSF(user.displayName!);
+      } else {
+        await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await HelperFunctions.saveUserLoggedInStatus(true);
+      await HelperFunctions.saveUserEmailSF(user.email!);
 
-      if (googleAuth.idToken == null) {
-        showSnackBar(context, Colors.red, "Google sign-in failed. Try again.");
-        setState(() => _isLoading = false);
-        return;
-      }
-
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken!,
-      );
-
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      User? user = userCredential.user;
-      if (user != null) {
-        QuerySnapshot snapshot =
-            await DatabaseService(uid: user.uid).gettingUserData(user.email!);
-
-        if (snapshot.docs.isEmpty) {
-          await DatabaseService(uid: user.uid)
-              .savingUserData(user.displayName!, user.email!);
-          await HelperFunctions.saveUserNameSF(user.displayName!);
-        } else {
-          await HelperFunctions.saveUserNameSF(snapshot.docs[0]['fullName']);
-        }
-
-        await HelperFunctions.saveUserLoggedInStatus(true);
-        await HelperFunctions.saveUserEmailSF(user.email!);
-
-        nextScreenReplace(context, const HomePage());
-      }
-    } catch (e) {
-      showSnackBar(context, Colors.red, e.toString());
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      nextScreenReplace(context, const HomePage());
     }
+  } catch (e) {
+    showSnackBar(context, Colors.red, e.toString());
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
   }
+}
 
   // Forgot Password
   void showForgotPasswordDialog() {

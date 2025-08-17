@@ -93,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   },
                 );
-                // Removed duplicate logout call here
+                
               },
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 5),

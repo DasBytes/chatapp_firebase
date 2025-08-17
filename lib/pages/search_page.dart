@@ -19,8 +19,10 @@ class _SearchPageState extends State<SearchPage> {
   QuerySnapshot? searchSnapshot;
   bool hasUserSearched = false;
   String userName = "";
-  bool isJoined = false;
   User? user;
+
+  // Track join state per group
+  Map<String, bool> joinedGroups = {};
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _SearchPageState extends State<SearchPage> {
       });
     });
     user = FirebaseAuth.instance.currentUser;
-    // Optionally check if user == null here.
   }
 
   String getName(String r) {
@@ -105,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
                     color: Theme.of(context).primaryColor,
                   ),
                 )
-              : Expanded(child: groupList()), // wrapped in Expanded to avoid layout issues
+              : Expanded(child: groupList()),
         ],
       ),
     );
@@ -123,9 +124,25 @@ class _SearchPageState extends State<SearchPage> {
           searchSnapshot = snapshot;
           isLoading = false;
           hasUserSearched = true;
+
+          // Initialize join state for each group
+          for (var doc in snapshot.docs) {
+            String groupId = doc['groupId'];
+            joinedGroups[groupId] = false;
+            checkIfJoined(groupId, doc['groupName']);
+          }
         });
       });
     }
+  }
+
+  checkIfJoined(String groupId, String groupName) async {
+    if (user == null) return;
+    bool isJoined = await DatabaseService(uid: user!.uid)
+        .isUserJoined(groupName, groupId, userName);
+    setState(() {
+      joinedGroups[groupId] = isJoined;
+    });
   }
 
   groupList() {
@@ -134,30 +151,20 @@ class _SearchPageState extends State<SearchPage> {
             shrinkWrap: true,
             itemCount: searchSnapshot!.docs.length,
             itemBuilder: (context, index) {
+              var doc = searchSnapshot!.docs[index];
               return groupTile(
                 userName,
-                searchSnapshot!.docs[index]['groupId'],
-                searchSnapshot!.docs[index]['groupName'],
-                searchSnapshot!.docs[index]['admin'],
+                doc['groupId'],
+                doc['groupName'],
+                doc['admin'],
               );
             },
           )
         : Container();
   }
 
-  joinedOrNot(String userName, String groupId, String groupName, String admin) async {
-    await DatabaseService(uid: user!.uid)
-        .isUserJoined(groupName, groupId, userName)
-        .then((value) {
-      setState(() {
-        isJoined = value;
-      });
-    });
-  }
-
   Widget groupTile(String userName, String groupId, String groupName, String admin) {
-    // TODO: Calling async here causes repeated calls on each build; consider optimizing
-    joinedOrNot(userName, groupId, groupName, admin);
+    bool isJoined = joinedGroups[groupId] ?? false;
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -176,14 +183,18 @@ class _SearchPageState extends State<SearchPage> {
       subtitle: Text("Admin: ${getName(admin)}"),
       trailing: InkWell(
         onTap: () async {
-          await DatabaseService(uid: user!.uid).toggleGroupJoin(groupId, userName, groupName);
+          await DatabaseService(uid: user!.uid)
+              .toggleGroupJoin(groupId, userName, groupName);
+
           setState(() {
-            isJoined = !isJoined; // flip the join state first
+            joinedGroups[groupId] = !isJoined;
           });
-          if (isJoined) {
+
+          if (!isJoined) {
             showSnackBar(context, Colors.green, "Successfully joined the group");
             Future.delayed(const Duration(seconds: 2), () {
-              nextScreen(context, ChatPage(groupId: groupId, groupName: groupName, userName: userName));
+              nextScreen(context,
+                  ChatPage(groupId: groupId, groupName: groupName, userName: userName));
             });
           } else {
             showSnackBar(context, Colors.red, "Left the group $groupName");
@@ -198,7 +209,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: const Text(
-                  "joined",
+                  "Joined",
                   style: TextStyle(color: Colors.white),
                 ),
               )
